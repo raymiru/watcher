@@ -246,6 +246,7 @@ function startListener() {
 function start() {
     if (PERMISSION === 'watcher') {
         console.log('WATCHER >>>>')
+        watcher();
     }
     else if (PERMISSION === 'player') {
         console.log('PLAYER >>>>')
@@ -282,6 +283,7 @@ function betInfoListener() {
 
     chrome.runtime.onMessage.addListener(msg => {
         if (msg.type === 110) {
+            console.log('BET LISTENER')
            chooseTeamWhenExistLive(msg.team_winner);
            chooseBetValueWhenExist(msg.bet_val);
            warningPopupDisable();
