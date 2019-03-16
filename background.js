@@ -1,9 +1,6 @@
 const socket = io.connect('http://35.195.90.138/');
 
 
-
-
-
 socket.on('bet_msg_to_player', msg => {
 
     console.log(msg)

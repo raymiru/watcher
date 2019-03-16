@@ -254,41 +254,22 @@ function start() {
     }
 }
 
-// function setWatcher() {
-//     console.log('SET WATCHER FUNCTION HERE');
-//     chrome.runtime.onMessage.addListener(msg => {
-//         if (msg.type === 1) {
-//             WATCHER = msg.watcher;
-//             console.log(msg.type);
-//             console.log(`WATCHER = ${WATCHER}`)
-//             if (WATCHER === 1) watcher()
-//         }
-//     })
-// }
-//
-// function setPLayer() {
-//     console.log('SET PLAYER FUNCTION HERE')
-//     chrome.runtime.onMessage.addListener(msg => {
-//         if (msg.type === 2) {
-//             PLAYER = msg.player;
-//             console.log(msg.type);
-//             console.log(`PLAYER = ${PLAYER}`);
-//             if (PLAYER === 1) player();
-//         }
-//     })
-// }
-
 
 function betInfoListener() {
 
     chrome.runtime.onMessage.addListener(msg => {
-        if (msg.type === 110) {
-            console.log('BET LISTENER')
-           chooseTeamWhenExistLive(msg.team_winner);
-           chooseBetValueWhenExist(msg.bet_val);
-           warningPopupDisable();
-           placeBet();
+        try {
+            if (msg.type === 110) {
+                console.log('BET LISTENER')
+                chooseTeamWhenExistLive(msg.team_winner);
+                chooseBetValueWhenExist(msg.bet_val);
+                warningPopupDisable();
+                placeBet();
+            }
+        } catch (e) {
+            console.log('Match not started')
         }
+
     })
 
 }
@@ -309,12 +290,12 @@ function watcher() {
 
 function player() {
     getBank();
-
+    betInfoListener();
 }
 
 setPermission();
 startListener();
-betInfoListener();
+
 
 
 
