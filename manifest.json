@@ -1,0 +1,32 @@
+{
+  "description": "A boilerplate to chrome extension with webpack",
+  "version": "1.0",
+  "name": "Chrome Extension Webpack",
+  "options_page": "options.html",
+  "background": {
+    "page": "background.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://betsdota2.com/match/*",
+        "https://betscsgo.com/match/*"
+      ],
+      "js": [
+        "contentScript.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "tabs"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": "icons/icon-34.png"
+  },
+  "icons": {
+    "128": "icons/icon-128.png"
+  },
+  "manifest_version": 2,
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; "
+}
