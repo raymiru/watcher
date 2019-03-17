@@ -1,6 +1,3 @@
-//koef t2 jspath document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div > div > div.bm-team2 > button > div > div > div')
-//koef t1 jspath document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div > div > div.bm-team1 > button > div > div > div')
-
 let VAL = 0.1;
 let WARNING_POPUP;
 let TEAM_WINNER = 1;
@@ -21,11 +18,11 @@ let WATCHER_MESSAGE_TYPE = 2;
 let PLAYER = false;
 let PLAYER_MESSAGE_TYPE = 3;
 
-
-
-
-
-
+const COUNTS = {
+    CTWEL_Count: 30,
+    CBVWE_Count: 50,
+    BANK: 10000
+};
 
 
 function getURL() {
@@ -54,7 +51,6 @@ function getTournamentName() {
         t_name: TName
     })
 }
-
 
 
 function getMapNumInfo() {
@@ -114,7 +110,6 @@ function warningPopupDisable() {
 function chooseTeamWhenExistLive(TEAM_WINNER) {
 
     try {
-        let count = 30;
         let T1W = document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div > div > div.bm-team1 > button > div > div > div');
         let T2W = document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div > div > div.bm-team2 > button > div > div > div');
         if (T1W && T2W) {
@@ -122,13 +117,11 @@ function chooseTeamWhenExistLive(TEAM_WINNER) {
                 T1W.click();
 
 
-
             } else if (TEAM_WINNER == 2) {
                 T2W.click();
 
 
-
-            } else if (count-- > 0) {
+            } else if (COUNTS.CTWEL_Count-- > 0) {
                 setTimeout(chooseBetValueWhenExist, 40)
             }
         }
@@ -140,7 +133,6 @@ function chooseTeamWhenExistLive(TEAM_WINNER) {
 
 function getKoef() {
     try {
-        let count = 100000;
         KOEF_T1 = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-betbuttons.bet-live > div:nth-child(1) > button > span').innerText;
         KOEF_T2 = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-betbuttons.bet-live > div:nth-child(2) > button > span').innerText;
         console.log(KOEF_T1);
@@ -151,9 +143,7 @@ function getKoef() {
             koef_t2: KOEF_T2
         });
 
-        if (count-- > 0) {
-            setTimeout(getKoef, 250);
-        }
+        setTimeout(getKoef, 250);
     } catch (e) {
         console.log(e);
         console.log('The game has not started yet or has already ended');
@@ -163,20 +153,26 @@ function getKoef() {
 
 function getMaxBet() {
     try {
-
+        let MAX_BET = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-amounts > div.bet-pop-amount.bet-pop-userbet > div.input-max.bet-pop-right.bet-currency.bet-currency_USD.input-max_max > div > div.input-max__max > span').innerText;
+        chrome.runtime.sendMessage({
+            type: WATCHER_MESSAGE_TYPE,
+            max_bet: MAX_BET
+        })
+        setTimeout(getMaxBet, 400);
     } catch (e) {
         console.log(e);
     }
 }
 
+
 function chooseBetValueWhenExist(val) {
     try {
-        let count = 50;
+
         console.log('F2')
         let BET_INPUT = document.querySelector('.bet-input');
         if (BET_INPUT) {
             BET_INPUT.value = val
-        } else if (count-- > 0) {
+        } else if (COUNTS.CBVWE_Count-- > 0) {
             setTimeout(chooseBetValueWhenExist, 60);
         }
     } catch (e) {
@@ -195,32 +191,12 @@ function placeBet() {
 
 function getBank() {
     BANK_SELECTOR = document.querySelector('body > div.layout > div.layout__header > header > div.header__outer > div > div.header__body > div.header__userbar > div > div > div.userbar-user__bars > div > div.action-bars__user-info > div > div.user-info__current-user > div > a.current-user__rating.current-user__rating_mobile > span')
-    let count = 10000;
     chrome.runtime.sendMessage({
         type: PLAYER_MESSAGE_TYPE,
         bank: BANK_SELECTOR.innerText
     })
-    if (count-- > 0) setTimeout(getBank, 10000);
-    // let mutationObserver = new MutationObserver(mutations => {
-    //     mutations.forEach(mutation => {
-    //         bank = mutation.target.data;
-    //         console.log(mutation);
-    //         chrome.runtime.sendMessage({
-    //             bank
-    //         })
-    //     })
-    // });
-    //
-    // let config = {
-    //     attributes: true,
-    //     characterData: true,
-    //     childList: true,
-    //     subtree: true,
-    //     attributeOldValue: true,
-    //     characterDataOldValue: true
-    // };
-    //
-    // mutationObserver.observe(BANK_SELECTOR, config);
+    if (COUNTS.BANK-- > 0) setTimeout(getBank, 10000);
+
 }
 
 function setPermission() {
@@ -243,54 +219,44 @@ function startListener() {
     })
 }
 
-function start() {
-    if (PERMISSION === 'watcher') {
-        console.log('WATCHER >>>>')
-        watcher();
-    }
-    else if (PERMISSION === 'player') {
-        console.log('PLAYER >>>>')
-        player()
-    }
-}
-
-
 function betInfoListener() {
-
     chrome.runtime.onMessage.addListener(msg => {
-        try {
-            if (msg.type === 110) {
-                console.log('BET LISTENER')
-                chooseTeamWhenExistLive(msg.team_winner);
-                chooseBetValueWhenExist(msg.bet_val);
-                warningPopupDisable();
-                placeBet();
-            }
-        } catch (e) {
-            console.log('Match not started')
+        if (msg.type === 110) {
+            chooseTeamWhenExistLive(msg.team_winner);
+            chooseBetValueWhenExist(msg.bet_val);
+            warningPopupDisable();
+            placeBet();
         }
-
     })
 
 }
 
-
 function watcher() {
-
-    getBank();
     getURL();
     getTournamentName();
     getBestOf();
     getNamesOfTeams();
     getMapNumInfo();
-    chooseTeamWhenExistLive(1)
+    chooseTeamWhenExistLive(1);
     getKoef()
+    getMaxBet();
 }
 
 
 function player() {
     getBank();
     betInfoListener();
+}
+
+
+function start() {
+    if (PERMISSION === 'watcher') {
+        console.log('WATCHER >>>>');
+        watcher();
+    } else if (PERMISSION === 'player') {
+        console.log('PLAYER >>>>');
+        player()
+    }
 }
 
 setPermission();

@@ -7,6 +7,9 @@ const USER_ID = document.querySelector('#user_id');
 const PERMISSION = document.querySelector('#permission');
 const START_BUTTON = document.querySelector('#start');
 
+const DEV_BUTTON = document.querySelector('#dev');
+const PROD_BUTTON = document.querySelector('#prod');
+
 function startHandler(e) {
     e.preventDefault();
     chrome.runtime.sendMessage({
@@ -27,8 +30,24 @@ function userHandler(e) {
     console.log(PERMISSION.value)
 }
 
+function prodHandler(e) {
+    e.preventDefault();
+    chrome.runtime.sendMessage({
+        ip: 'prod'
+    })
+}
+
+function devHandler(e) {
+    e.preventDefault();
+    chrome.runtime.sendMessage({
+        ip: 'dev'
+    })
+}
+
 registerForm.addEventListener('submit', userHandler);
 START_BUTTON.addEventListener('click', startHandler);
+DEV_BUTTON.addEventListener('click', devHandler);
+PROD_BUTTON.addEventListener('click', prodHandler);
 
 
 

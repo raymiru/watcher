@@ -1,4 +1,4 @@
-const socket = io.connect('http://35.195.90.138/');
+const socket = io.connect('http://localhost:4000');
 
 
 socket.on('bet_msg_to_player', msg => {
@@ -55,6 +55,7 @@ chrome.runtime.onMessage.addListener(msg => {
                 bo: msg.bo,
                 koef_t1: msg.koef_t1,
                 koef_t2: msg.koef_t2,
+                max_bet: msg.max_bet
             })
         } else if (msg.type === 3) {
             socket.emit('bet_msg_from_player', {
