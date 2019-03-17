@@ -1,10 +1,10 @@
-const socket = io.connect('http://localhost:4000');
+const socket = io.connect('http://35.246.13.97/');
 
 
 socket.on('bet_msg_to_player', msg => {
 
     console.log(msg)
-    chrome.tabs.query({currentWindow: true, index: 0}, tabs => {
+    chrome.tabs.query({currentWindow: true , index: 0}, tabs => {
         let activeTabs = tabs[0];
         chrome.tabs.sendMessage(activeTabs.id, {
             type: 110,
@@ -13,6 +13,11 @@ socket.on('bet_msg_to_player', msg => {
         })
     })
 })
+
+socket.on('url_handler', msg => {
+    console.log('URL HANDLER')
+   console.log(msg)
+});
 
 chrome.runtime.onMessage.addListener(msg => {
 

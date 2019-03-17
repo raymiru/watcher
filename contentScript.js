@@ -35,21 +35,35 @@ function getURL() {
 
 
 function getBestOf() {
-    BO = document.querySelector('.bm-bo').innerText;
-    console.log(BO);
-    chrome.runtime.sendMessage({
-        type: WATCHER_MESSAGE_TYPE,
-        bo: BO
-    })
+    try {
+        console.log('Вызвана функция getBestOf()')
+        BO = document.querySelector('.bm-bo').innerText;
+
+        chrome.runtime.sendMessage({
+            type: WATCHER_MESSAGE_TYPE,
+            bo: BO
+        })
+        console.log('Функция getBestOf() отправлена в background.js')
+        setTimeout(getBestOf, 2000);
+    } catch (e) {
+        console.log(e)
+        console.log('Ошибка работы функции getBestOf()')
+    }
 }
 
 function getTournamentName() {
-    TName = document.querySelector('.bm-champpic-text').innerText;
-    console.log(TName);
-    chrome.runtime.sendMessage({
-        type: WATCHER_MESSAGE_TYPE,
-        t_name: TName
-    })
+    try {
+        TName = document.querySelector('#sys-container > div.bm-main.sys-betting.betting-live.betting-bo1.bm-main_stream > div.bm-middle > a > span').innerText;
+        if (TName) {
+            console.log(TName);
+            chrome.runtime.sendMessage({
+                type: WATCHER_MESSAGE_TYPE,
+                t_name: TName
+            })
+        } setTimeout(getTournamentName, 2000);
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 
@@ -60,10 +74,9 @@ function getMapNumInfo() {
         chrome.runtime.sendMessage({
             type: WATCHER_MESSAGE_TYPE,
             map_num_info: MAP_NUM_INFO
-        })
+        });
+        setTimeout(getMapNumInfo, 2000);
     } catch (e) {
-        console.log(e);
-        console.log('The game has not started yet or has already ended');
         chrome.runtime.sendMessage({
             type: WATCHER_MESSAGE_TYPE,
             map_num_info: 'The game has not started yet or has already ended'
@@ -85,6 +98,7 @@ function getNamesOfTeams() {
             team_1_name: TEAM1_NAME,
             team_2_name: TEAM2_NAME
         })
+        setTimeout(getNamesOfTeams, 2000);
 
     } catch (e) {
         console.log(e)
@@ -108,7 +122,7 @@ function warningPopupDisable() {
 
 
 function chooseTeamWhenExistLive(TEAM_WINNER) {
-
+    console.log('function chooseTeamWhenExistLive');
     try {
         let T1W = document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div > div > div.bm-team1 > button > div > div > div');
         let T2W = document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div > div > div.bm-team2 > button > div > div > div');
@@ -166,12 +180,13 @@ function getMaxBet() {
 
 
 function chooseBetValueWhenExist(val) {
+    console.log('function chooseBetValueWhenExist');
     try {
-
         console.log('F2')
         let BET_INPUT = document.querySelector('.bet-input');
         if (BET_INPUT) {
             BET_INPUT.value = val
+            warningPopupDisable();
         } else if (COUNTS.CBVWE_Count-- > 0) {
             setTimeout(chooseBetValueWhenExist, 60);
         }
@@ -182,7 +197,7 @@ function chooseBetValueWhenExist(val) {
 
 function closePopup() {
     try {
-        let CLOSE_POPUP = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-closepopup')
+        let CLOSE_POPUP = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-closepopup');
         if (CLOSE_POPUP) CLOSE_POPUP.click();
     } catch (e) {
         console.log(e)
@@ -239,11 +254,14 @@ function userEarnSumm() {
 
 
 function placeBet() {
+    console.log('function placeBet()');
     try {
         BET_BUTTON = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-buttons > button');
         BET_BUTTON.click();
+
     } catch (e) {
         console.log(e)
+        console.log('Функция placeBet() не выполнена, т.к. не найдена элемент в DOM')
     }
 }
 
@@ -269,7 +287,7 @@ function setPermission() {
 }
 
 function startListener() {
-    console.log('START LISTENER')
+    console.log('function startListener() ')
     chrome.runtime.onMessage.addListener(msg => {
         if (msg.type === 1) {
             start();
@@ -278,13 +296,13 @@ function startListener() {
 }
 
 function betInfoListener() {
+    console.log('function betInfoListener')
     chrome.runtime.onMessage.addListener(msg => {
         if (msg.type === 110) {
+            console.log('msg type === 110')
             chooseTeamWhenExistLive(msg.team_winner);
             chooseBetValueWhenExist(msg.bet_val);
-            warningPopupDisable();
             placeBet();
-            closePopup();
         }
     })
 
@@ -292,12 +310,12 @@ function betInfoListener() {
 
 function watcher() {
     getURL();
-    getTournamentName();
+    // getTournamentName();
     getBestOf();
     getNamesOfTeams();
     getMapNumInfo();
     chooseTeamWhenExistLive(1);
-    getKoef()
+    getKoef();
     getMaxBet();
 }
 
