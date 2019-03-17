@@ -180,6 +180,64 @@ function chooseBetValueWhenExist(val) {
     }
 }
 
+function closePopup() {
+    try {
+        let CLOSE_POPUP = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-closepopup')
+        if (CLOSE_POPUP) CLOSE_POPUP.click();
+    } catch (e) {
+        console.log(e)
+    }
+
+}
+
+function placeOdds() {
+    try {
+        let PLACE_ODDS_T1 = document.querySelector('#bm-additionals > div:nth-child(1) > div > div.bma-bet.sys-betting.betting-user-team1.betting-won-team2.betting-past > div.bm-team1 > button > div.btn-bet-head > div.bm-fullbet-summ-cy.sys-stat-abs-1.bet-currency.bet-currency_undefined');
+        let PLACE_ODDS_T2 = document.querySelector('#bm-additionals > div:nth-child(1) > div > div.bma-bet.sys-betting.betting-user-team1.betting-won-team2.betting-past > div.bm-team2 > button > div.btn-bet-head > div.bm-fullbet-summ-cy.sys-stat-abs-2.bet-currency.bet-currency_undefined');
+        chrome.runtime.sendMessage({
+            place_odds_t1: PLACE_ODDS_T1.innerText,
+            place_odds_t2: PLACE_ODDS_T2.innerText
+        });
+        setTimeout(placeOdds, 1000);
+    } catch (e) {
+        console.log(e)
+    }
+
+}
+
+
+function userPlaceSumm() {
+    try {
+        let PLACE_SUMM_T1 = document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div.bma-bet.sys-betting.betting-live.betting-user-team1 > div.bm-team1 > div > div.bet-user-summ > span');
+        let PLACE_SUMM_T2 = document.querySelector('#bm-additionals > div:nth-child(1) > div > div.bma-bet.sys-betting.betting-user-team1.betting-won-team2.betting-past > div.bm-team2 > div > div.bet-user-summ > span');
+
+        chrome.runtime.sendMessage({
+            place_summ_t1: PLACE_SUMM_T1.innerText,
+            place_summ_t2: PLACE_SUMM_T2.innerText
+        })
+        setTimeout(userPlaceSumm, 1000);
+    } catch (e) {
+        console.log(e)
+    }
+
+}
+
+function userEarnSumm() {
+    try {
+        let EARN_SUMM_T1 = document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div.bma-bet.sys-betting.betting-live.betting-user-team1 > div.bm-team1 > div > div.bet-user-earn > div.sys-bet-user-earn-summ-1.bet-user-earn-summ > span');
+        let EARN_SUMM_T2 = document.querySelector('#bm-additionals > div.bm-additional.bm-additional-common.a-betting-next > div > div.bma-bet.sys-betting.betting-live.betting-user-team1 > div.bm-team2 > div > div.bet-user-earn > div.sys-bet-user-earn-summ-2.bet-user-earn-summ > span');
+        chrome.runtime.sendMessage({
+            type: WATCHER_MESSAGE_TYPE,
+            earn_summ_t1: EARN_SUMM_T1.innerText,
+            earn_summ_t2: EARN_SUMM_T2.innerText
+        })
+        setTimeout(userEarnSumm, 1000);
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
 function placeBet() {
     try {
         BET_BUTTON = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-buttons > button');
@@ -226,6 +284,7 @@ function betInfoListener() {
             chooseBetValueWhenExist(msg.bet_val);
             warningPopupDisable();
             placeBet();
+            closePopup();
         }
     })
 
@@ -245,6 +304,9 @@ function watcher() {
 
 function player() {
     getBank();
+    userPlaceSumm();
+    userEarnSumm();
+    placeOdds();
     betInfoListener();
 }
 

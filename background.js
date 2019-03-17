@@ -59,7 +59,13 @@ chrome.runtime.onMessage.addListener(msg => {
             })
         } else if (msg.type === 3) {
             socket.emit('bet_msg_from_player', {
-                bank: msg.bank
+                bank: msg.bank,
+                place_summ_t1: msg.place_summ_t1,
+                place_summ_t2: msg.place_summ_t2,
+                earn_summ_t1: msg.earn_summ_t1,
+                earn_summ_t2: msg.earn_summ_t2,
+                place_odds_t1: msg.place_odds_t1,
+                place_odds_t2: msg.place_odds_t2
             })
         }
     }
