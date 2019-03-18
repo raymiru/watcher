@@ -52,6 +52,15 @@ function userHandler(e) {
 }
 
 
+
+// chrome.runtime.onMessage.addListener(msg => {
+//     console.log('LISTENER')
+//     if (msg.type === 112) {
+//         console.log(112);
+//         PLAYER_BUTTON.addEventListener('click', playerHandler);
+//     }
+// });
+
 registerForm.addEventListener('submit', userHandler);
 START_BUTTON.addEventListener('click', startHandler);
 WATCHER_BUTTON.addEventListener('click', watcherHandler);

@@ -23,6 +23,11 @@ socket.on('url_handler', msg => {
             match_url: msg.match_url
         })
     })
+    setTimeout(() => {
+        chrome.runtime.sendMessage({
+            type: 112,
+        })
+    }, 5000);
 });
 
 chrome.runtime.onMessage.addListener(msg => {

@@ -291,8 +291,11 @@ function urlListener() {
     console.log('urlListener()');
     chrome.runtime.onMessage.addListener(msg => {
         if (msg.type === 111) {
-            console.log('URL LISTENER V DELE')
-            document.location.href = msg.match_url
+            PERMISSION = 'player';
+            console.log('URL LISTENER V DELE');
+            document.location.href = msg.match_url;
+            setTimeout(start, 5000);
+            console.log('urlListener() setTimeout(start, 5000)')
         }
     })
 }
