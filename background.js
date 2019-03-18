@@ -15,7 +15,11 @@ socket.on('bet_msg_to_player', msg => {
 })
 
 socket.on('url_handler', msg => {
-    console.log('url_handler')
+    console.log('url_handler');
+    socket.emit('register', {
+        steam_username: localStorage['player'],
+        permission: 'player'
+    });
     chrome.tabs.query({currentWindow: true, index: 0}, tabs => {
         let activeTabs = tabs[0];
         chrome.tabs.sendMessage(activeTabs.id, {
@@ -23,11 +27,6 @@ socket.on('url_handler', msg => {
             match_url: msg.match_url
         })
     })
-    setTimeout(() => {
-        chrome.runtime.sendMessage({
-            type: 112,
-        })
-    }, 5000);
 });
 
 chrome.runtime.onMessage.addListener(msg => {
