@@ -31,6 +31,7 @@ function getURL() {
         type: WATCHER_MESSAGE_TYPE,
         match_url: URL
     })
+    setTimeout(getURL, 3500);
 }
 
 
@@ -44,7 +45,7 @@ function getBestOf() {
             bo: BO
         })
         console.log('Функция getBestOf() отправлена в background.js')
-        setTimeout(getBestOf, 2000);
+        setTimeout(getBestOf, 5000);
     } catch (e) {
         console.log(e)
         console.log('Ошибка работы функции getBestOf()')
@@ -98,7 +99,7 @@ function getNamesOfTeams() {
             team_1_name: TEAM1_NAME,
             team_2_name: TEAM2_NAME
         })
-        setTimeout(getNamesOfTeams, 2000);
+        setTimeout(getNamesOfTeams, 3500);
 
     } catch (e) {
         console.log(e)
@@ -157,7 +158,7 @@ function getKoef() {
             koef_t2: KOEF_T2
         });
 
-        setTimeout(getKoef, 250);
+        setTimeout(getKoef, 300);
     } catch (e) {
         console.log(e);
         console.log('The game has not started yet or has already ended');
@@ -286,6 +287,16 @@ function setPermission() {
     })
 }
 
+function urlListener() {
+    console.log('urlListener()');
+    chrome.runtime.onMessage.addListener(msg => {
+        if (msg.type === 111) {
+            console.log('URL LISTENER V DELE')
+            document.location.href = msg.match_url
+        }
+    })
+}
+
 function startListener() {
     console.log('function startListener() ')
     chrome.runtime.onMessage.addListener(msg => {
@@ -341,7 +352,7 @@ function start() {
 
 setPermission();
 startListener();
-
+urlListener();
 
 
 

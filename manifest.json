@@ -9,8 +9,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://betsdota2.com/match/*",
-        "https://betscsgo.com/match/*"
+        "https://betsdota2.com/*",
+        "https://betscsgo.com/*"
       ],
       "js": [
         "contentScript.js"

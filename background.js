@@ -1,10 +1,10 @@
-const socket = io.connect('http://35.246.13.97/');
+const socket = io.connect('http://localhost:4000');
 
 
 socket.on('bet_msg_to_player', msg => {
 
     console.log(msg)
-    chrome.tabs.query({currentWindow: true , index: 0}, tabs => {
+    chrome.tabs.query({currentWindow: true, index: 0}, tabs => {
         let activeTabs = tabs[0];
         chrome.tabs.sendMessage(activeTabs.id, {
             type: 110,
@@ -15,17 +15,39 @@ socket.on('bet_msg_to_player', msg => {
 })
 
 socket.on('url_handler', msg => {
-    console.log('URL HANDLER')
-   console.log(msg)
+    console.log('url_handler')
+    chrome.tabs.query({currentWindow: true, index: 0}, tabs => {
+        let activeTabs = tabs[0];
+        chrome.tabs.sendMessage(activeTabs.id, {
+            type: 111,
+            match_url: msg.match_url
+        })
+    })
 });
 
 chrome.runtime.onMessage.addListener(msg => {
 
+    if (msg.type === 9) {
+        socket.emit('register', {
+            steam_username: localStorage['player'],
+            permission: 'player'
+        })
+        chrome.tabs.query({currentWindow: true, active: true}, tabs => {
+            let activeTabs = tabs[0];
+            chrome.tabs.sendMessage(activeTabs.id, {
+                type: 0,
+                permission: 'player'
+            })
+        })
+
+    }
+
         // msg.type === 0 регистарция в админ системе и установка прав (watcher/player)
         // Message from popup
         if (msg.type === 0) {
+            localStorage['player'] = msg.steam_username;
+            console.log(localStorage['player']);
             socket.emit('register', {
-                user_id: parseInt(msg.user_id, 10),
                 steam_username: msg.steam_username,
                 permission: msg.permission
             });
