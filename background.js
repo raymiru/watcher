@@ -1,4 +1,4 @@
-const socket = io.connect('http://localhost:4000');
+const socket = io.connect('http://35.246.13.97/');
 
 
 socket.on('bet_msg_to_player', msg => {
