@@ -1,3 +1,8 @@
+chrome.runtime.onMessage.addListener(msg => {
+    console.log('msg')
+})
+
+
 let VAL = 0.1;
 let WARNING_POPUP;
 let TEAM_WINNER = 1;

@@ -11,6 +11,16 @@ const REG_BUTTON = document.querySelector('#reg');
 
 
 
+function testHandler() {
+        console.log(msg)
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {type:"getText"}, function(response){
+            alert(response)
+        });
+    });
+}
+
+
 function watcherHandler(e) {
     console.log('watcherHandler()')
     e.preventDefault();
@@ -64,7 +74,7 @@ function userHandler(e) {
 registerForm.addEventListener('submit', userHandler);
 START_BUTTON.addEventListener('click', startHandler);
 WATCHER_BUTTON.addEventListener('click', watcherHandler);
-PLAYER_BUTTON.addEventListener('click', playerHandler);
+PLAYER_BUTTON.addEventListener('click', testHandler);
 
 
 

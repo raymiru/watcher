@@ -2,14 +2,22 @@
   "name": "d2bets_boost",
   "version": "1.0.0",
   "description": "",
-  "main": "background.js",
+  "main": "src/js/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "parcel build src/js/main.js -d build/ -o main.js & parcel build src/popup.html -d build/",
+    "watch-popup": "parcel watch src/popup.html -d build",
+    "watch-main": "parcel watch src/js/main.js -d build/ -o main.js",
+    "watch": "npm run watch-popup && npm run watch-main"
+  },
+  "staticFiles": {
+    "staticPath": "src/static",
+    "watcherGlob": "**"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/socket.io-client": "^1.4.32",
+    "parcel-plugin-static-files-copy": "^2.0.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0"
   }

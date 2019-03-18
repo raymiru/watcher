@@ -1,11 +1,8 @@
 {
-  "description": "A boilerplate to chrome extension with webpack",
+  "description": "B2BETS Extension",
   "version": "1.0",
-  "name": "Chrome Extension Webpack",
-  "options_page": "options.html",
-  "background": {
-    "page": "background.html"
-  },
+  "name": "B2BETS Extension",
+
   "content_scripts": [
     {
       "matches": [
@@ -13,11 +10,12 @@
         "https://betscsgo.com/*"
       ],
       "js": [
-        "contentScript.js"
+        "main.js"
       ]
     }
   ],
   "permissions": [
+    "activeTab",
     "tabs"
   ],
   "browser_action": {
