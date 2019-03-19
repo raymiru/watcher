@@ -28,7 +28,7 @@ const permissionListener = () => {
 const regCheck = () => {
     console.log(`Пользователь: ${localStorage['steam_username']} `);
     if (localStorage['steam_username'] !== undefined) {
-        playerStart(socket);
+        playerStart();
     }
 };
 
