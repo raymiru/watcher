@@ -1,9 +1,8 @@
-import io from 'socket.io-client'
 import {watcherStart} from './services/watcher'
 import {deleteUser, regStart} from "./services/registration";
 import {playerStart} from "./services/player";
 
-const socket = io.connect('http://35.246.13.97/');
+
 
 const permissionListener = () => {
 
