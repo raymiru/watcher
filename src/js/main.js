@@ -3,7 +3,7 @@ import {watcherStart} from './services/watcher'
 import {deleteUser, regStart} from "./services/registration";
 import {playerStart} from "./services/player";
 
-const socket = io.connect('http://35.246.13.97/');
+const socket = io.connect('http://localhost:4000');
 
 const permissionListener = () => {
 
