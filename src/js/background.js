@@ -1,6 +1,15 @@
 import io from 'socket.io-client'
+import {host} from './config'
 
-const socket = io.connect('http://35.246.13.97/');
+let socket;
+
+if (localStorage['dev'] === 1) {
+    socket = io.connect(host.dev);
+} else {
+    socket = io.connect(host.prod);
+}
+
+
 
 const socketListener = () => {
     socket.on('bet_msg_to_player', msg => {

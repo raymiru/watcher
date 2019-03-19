@@ -1,4 +1,4 @@
-export const loginStart = socket => {
+export const loginStart = () => {
     console.log('Запущена функция loginStart()');
 
 

@@ -11,7 +11,7 @@ export const playerStart = () => {
             setValue(msg.bet_val);
             warningDisable();
             placeBet();
-            // refreshPage();
+            refreshPage();
         }
         if (msg.type === 'url_handler') {
             document.location.href = msg.match_url
@@ -77,9 +77,9 @@ const placeBet = () => {
 };
 
 
-// const refreshPage = () => {
-//     console.log('Перезагружаю страницу')
-//     window.location.reload();
-// };
+const refreshPage = () => {
+    console.log('Перезагружаю страницу')
+    window.location.reload();
+};
 
 
