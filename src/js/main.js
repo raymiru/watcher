@@ -10,13 +10,13 @@ const permissionListener = () => {
         console.log(msg)
         if (msg.type === 'permission') {
             if (msg.permission === 'watcher') {
-                watcherStart(socket);
+                watcherStart();
             } else if (msg.permission === 'player') {
-                playerStart(socket);
+                playerStart();
             }
         } else if (msg.type === 'registration') {
             console.log('Регистрация');
-            regStart(socket, msg);
+            regStart(, msg);
         } else if (msg.type === 'delete_user') {
             console.log(`${localStorage['steam_username']} удален`);
             deleteUser();
@@ -28,7 +28,7 @@ const permissionListener = () => {
 const regCheck = () => {
     console.log(`Пользователь: ${localStorage['steam_username']} `);
     if (localStorage['steam_username'] !== undefined) {
-        playerStart(socket);
+        playerStart();
     }
 };
 
