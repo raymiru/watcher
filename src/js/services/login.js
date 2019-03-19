@@ -1,7 +1,11 @@
 export const loginStart = socket => {
     console.log('Запущена функция loginStart()');
-    socket.emit('register', {
+
+
+
+    chrome.runtime.sendMessage({
+        type: "to_background_login",
         steam_username: localStorage['steam_username'],
         permission: 'player'
-    });
+    })
 };

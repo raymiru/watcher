@@ -1,18 +1,24 @@
 import {loginStart} from "./login";
 
-export const playerStart = socket => {
+export const playerStart = () => {
     console.log('Запущена функция playerStart()');
-    loginStart(socket);
-    urlHandler(socket);
-    socket.on('bet_msg_to_player', msg => {
-        console.log('Принимаю сообщения от вебсокета');
-        console.log(msg)
-        chooseTeam(msg.team_winner);
-        setValue(msg.bet_val);
-        warningDisable();
-        placeBet();
-        // refreshPage();
+    loginStart();
+    chrome.runtime.onMessage.addListener(msg => {
+        if (msg.type === 'to_player') {
+            console.log('Принимаю сообщения от вебсокета');
+            console.log(msg)
+            chooseTeam(msg.team_winner);
+            setValue(msg.bet_val);
+            warningDisable();
+            placeBet();
+            // refreshPage();
+        }
+        if (msg.type === 'url_handler') {
+            document.location.href = msg.match_url
+        }
+
     })
+
 };
 
 export const chooseTeam = team_winner => {
@@ -36,11 +42,6 @@ export const chooseTeam = team_winner => {
 
 };
 
-const urlHandler = socket => {
-    socket.on('url_handler', msg => {
-        document.location.href = msg.match_url
-    })
-}
 
 const setValue = bet_val => {
     console.log('Установлен bet_val')
@@ -64,13 +65,13 @@ const warningDisable = () => {
 };
 
 const placeBet = () => {
-    console.log('Ставка сделана')
+
     try {
         let bet_button = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-buttons > button');
         bet_button.click();
-
+        console.log('Ставка сделана')
     } catch (e) {
-        console.log(e)
+        console.log(e);
         console.log('Функция placeBet() не выполнена, т.к. не найдена элемент в DOM')
     }
 };

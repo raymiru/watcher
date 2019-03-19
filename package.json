@@ -4,10 +4,10 @@
   "description": "",
   "main": "src/js/main.js",
   "scripts": {
-    "build": "parcel build src/js/main.js -d build/ -o main.js & parcel build src/popup.html -d build/",
+    "build": "parcel build src/js/main.js -d build/ -o main.js & parcel build src/popup.html -d build/ & parcel build src/js/background.js -d build/ -o background.js",
     "watch-popup": "parcel watch src/popup.html -d build",
     "watch-main": "parcel watch src/js/main.js -d build/ -o main.js",
-    "watch": "npm run watch-popup && npm run watch-main"
+    "watch-background": "parcel watch src/js/background.js -d build/ -o background.js"
   },
   "staticFiles": {
     "staticPath": "src/static",
@@ -20,5 +20,8 @@
     "parcel-plugin-static-files-copy": "^2.0.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0"
+  },
+  "devDependencies": {
+    "cssnano": "^4.1.10"
   }
 }
