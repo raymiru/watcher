@@ -3,7 +3,7 @@ import {host} from './config'
 
 let socket;
 
-if (localStorage['dev'] === 1) {
+if (localStorage['dev'] === "1") {
     socket = io.connect(host.dev);
 } else {
     socket = io.connect(host.prod);

@@ -1,4 +1,4 @@
-export const regStart = (socket, msg) => {
+export const regStart = msg => {
     console.log('Запущена функция regStart()');
     localStorage['steam_username'] = msg.steam_username;
     console.log(`Зарегестрирован пользователь: ${localStorage['steam_username']}`)

@@ -32,9 +32,11 @@ const watcherHandler = e => {
     e.preventDefault();
     console.log('Нажата кнопка Watcher');
     sendMsg({
-        type: 'permission',
+        type: 'registration',
+        steam_username: 'watcher',
         permission: 'watcher'
     })
+    localStorage['steam_username'] = 'watcher'
 };
 
 const regHandler = e => {
