@@ -1,4 +1,16 @@
-let team_1_name, team_2_name, team_1_odds, team_2_odds, max_bet, bo;
+import {chooseTeam} from "./player";
+
+let team_1_name, team_2_name, team_1_odds, team_2_odds, max_bet, bo, team_1_img, team_2_img;
+
+let sock;
+
+if (document.querySelector('.t1logo')) {
+     team_1_img = document.querySelector('.t1logo').getAttribute('src');
+}
+
+if (document.querySelector('.t2logo')) {
+    team_2_img = document.querySelector('.t2logo').getAttribute('src');
+}
 
 
 if (document.querySelector('.t1name')) {
@@ -10,83 +22,86 @@ if (document.querySelector('.t2name')) {
     team_2_name = document.querySelector('.t2name').innerText;
 }
 
-if (document.querySelector('.t2name')) {
-    team_1_odds = document.querySelector('.t2name');
+if (document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-betbuttons.bet-live > div:nth-child(1) > button > span')) {
+    team_1_odds = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-betbuttons.bet-live > div:nth-child(1) > button > span').innerText;
 }
 
-if (document.querySelector('.t2name')) {
-    team_2_odds = document.querySelector('.t2name');
+if (document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-betbuttons.bet-live > div:nth-child(2) > button > span')) {
+    team_2_odds = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-betbuttons.bet-live > div:nth-child(2) > button > span').innerText;
 }
 
-if (document.querySelector('.t2name')) {
-    max_bet = document.querySelector('.t2name');
+if (document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-amounts > div.bet-pop-amount.bet-pop-userbet > div.input-max.bet-pop-right.bet-currency.bet-currency_USD.input-max_max > div > div.input-max__max > span')) {
+    max_bet = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-amounts > div.bet-pop-amount.bet-pop-userbet > div.input-max.bet-pop-right.bet-currency.bet-currency_USD.input-max_max > div > div.input-max__max > span');
 }
 
 if (document.querySelector('.bm-bo')) {
     bo = document.querySelector('.bm-bo').innerText;
 }
 
-const observerOptions = {
-    attributes: true,
-    attributeOldValue: true,
-    characterData: true,
-    characterDataOldValue: true,
-    childList: true,
-    subtree: true
-};
 
 export const watcherStart = socket => {
-    console.log('Запущена функция watcher()');
-    sendStaticData(socket);
-    sendDynamicData(socket);
+    sock = socket;
+    console.log('Запущена функция watcherStart()');
+    try {
+        chooseTeam(1);
+        sendDynamicData(sock);
+        setInterval(sendStaticData, 1000);
+    } catch (e) {
+        console.log(e);
+        console.log('Вы находитесь не на странице матча');
+    }
 };
 
-const sendStaticData = socket => {
-    socket.emit('bet_msg_from_watcher', {
+
+
+const sendStaticData = () => {
+    sock.emit('bet_msg_from_watcher', {
         match_url: window.location.href,
         team_1_name,
         team_2_name,
+        team_1_img,
+        team_2_img,
         bo,
-        team_1_odds: team_1_odds.innerText,
-        team_2_odds: team_2_odds.innerText,
-        max_bet: max_bet.innerText
+        team_1_odds: team_1_odds,
+        team_2_odds: team_2_odds,
+
     });
 };
 
-const sendDynamicData = socket => {
-    sendT1Odds(socket);
-    sendT2Odds(socket);
-    sendMaxBet(socket);
+const sendDynamicData = sock => {
+    sendOdds(sock)
+    sendMaxBet(sock);
 };
 
-const sendT1Odds = socket => {
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            socket.emit('bet_msg_from_watcher', {team_1_odds: mutation.target.data})
+const sendOdds = () => {
+    try {
+        team_1_odds = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-betbuttons.bet-live > div:nth-child(1) > button > span').innerText;
+        team_2_odds = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-betbuttons.bet-live > div:nth-child(2) > button > span').innerText;
+        console.log(team_1_odds);
+        console.log(team_2_odds);
+        sock.emit('bet_msg_from_watcher', {
+            team_1_odds,
+            team_2_odds,
         })
-    });
+        setTimeout(sendOdds, 300);
+    } catch (e) {
+        console.log(e);
+        console.log('The game has not started yet or has already ended');
+    }
+}
 
-    observer.observe(team_1_odds, observerOptions)
-};
+const sendMaxBet = () => {
+    try {
+        max_bet = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-amounts > div.bet-pop-amount.bet-pop-userbet > div.input-max.bet-pop-right.bet-currency.bet-currency_USD.input-max_max > div > div.input-max__max > span').innerText;
+        console.log(`MAX BET : ${max_bet}`);
+        sock.emit('bet_msg_from_watcher', {
+            max_bet
+        });
+        setTimeout(sendMaxBet, 400);
+    } catch (e) {
+        console.log(e);
+    }
 
-const sendT2Odds = socket => {
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            socket.emit('bet_msg_from_watcher', {team_2_odds: mutation.target.data})
-        })
-    });
-
-    observer.observe(team_2_odds, observerOptions)
-};
-
-const sendMaxBet = socket => {
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            socket.emit('bet_msg_from_watcher', {max_bet: mutation.target.data})
-        })
-    });
-
-    observer.observe(max_bet, observerOptions)
 };
 
 
