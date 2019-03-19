@@ -16,7 +16,7 @@ const permissionListener = () => {
             }
         } else if (msg.type === 'registration') {
             console.log('Регистрация');
-            regStart(, msg);
+            regStart(msg);
         } else if (msg.type === 'delete_user') {
             console.log(`${localStorage['steam_username']} удален`);
             deleteUser();
@@ -28,7 +28,7 @@ const permissionListener = () => {
 const regCheck = () => {
     console.log(`Пользователь: ${localStorage['steam_username']} `);
     if (localStorage['steam_username'] !== undefined) {
-        playerStart();
+        playerStart(socket);
     }
 };
 
