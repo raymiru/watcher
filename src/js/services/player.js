@@ -8,9 +8,7 @@ export const playerStart = () => {
             console.log('Принимаю сообщения от вебсокета');
             console.log(msg)
             chooseTeam(msg.team_winner);
-            setTimeout(() => {
-                setValue(msg.bet_val);
-            }, 500);
+            setValue(msg.bet_val);
             warningDisable();
             placeBet();
             setTimeout(refreshPage, 1500);
