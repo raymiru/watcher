@@ -11,7 +11,7 @@ export const playerStart = () => {
             setValue(msg.bet_val);
             warningDisable();
             placeBet();
-            refreshPage();
+            setTimeout(refreshPage, 1500);
         }
         if (msg.type === 'url_handler') {
             document.location.href = msg.match_url
