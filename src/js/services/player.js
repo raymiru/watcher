@@ -1,8 +1,12 @@
 import {loginStart} from "./login";
 
+let bank;
+
+
 export const playerStart = () => {
     console.log('Запущена функция playerStart()');
     loginStart();
+
     chrome.runtime.onMessage.addListener(msg => {
         if (msg.type === 'to_player') {
             console.log('Принимаю сообщения от вебсокета');
@@ -10,6 +14,7 @@ export const playerStart = () => {
             chooseTeam(msg.team_winner);
             setValue(msg.bet_val);
             warningDisable();
+            clickCheckbox();
             placeBet();
             setTimeout(refreshPage, 1500);
         }
@@ -39,7 +44,24 @@ export const chooseTeam = team_winner => {
     } catch (e) {
         console.log(e)
     }
+};
 
+const clickCheckbox = () => {
+    if (document.querySelector('#ch1')) {
+        document.querySelector('#ch1').checked = true
+    }
+};
+
+const updateInfo = () => {
+    console.log('Выполнена функция updateInfo');
+    console.log(`bank = ${bank}`)
+    bank = document.querySelector('body > div.layout > div.layout__header > header > div.header__outer > div > div.header__body > div.header__userbar > div > div > div.userbar-user__bars > div > div.action-bars__user-info > div > div.user-info__current-user > div > a.current-user__rating.current-user__rating_mobile > span').innerText
+    chrome.runtime.sendMessage({
+        type: "to_background_update_info",
+        steam_username: localStorage['steam_username'],
+        bank
+    })
+    console.log(`bank = ${bank}`)
 };
 
 

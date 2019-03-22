@@ -31,12 +31,22 @@ const contentScriptListener = () => {
     chrome.runtime.onMessage.addListener(msg => {
         console.log(`to_background_login: ${msg}`)
         if (msg.type === 'to_background_login') {
-            console.log('Понял, принял');
+            console.log(msg)
             socket.emit('login', {
-                    steam_username: localStorage['steam_username'],
+                    steam_username: msg.steam_username,
                     permission: 'player'
             });
         }
+
+        if (msg.type === 'to_background_update_info') {
+            console.log('update info');
+            socket.emit('player_info_update', {
+                steam_username: msg.steam_username,
+                bank: msg.bank,
+                permission: 'player'
+            })
+        }
+
         if (msg.type === 'to_background_static') {
             console.log('to_background_static')
             socket.emit('bet_msg_from_watcher', {
