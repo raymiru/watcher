@@ -3,7 +3,8 @@ const buttons = {
     watcher: document.querySelector('#watcher'),
     steam_username: document.querySelector('#username'),
     player: document.querySelector('#player'),
-    delete_player: document.querySelector('#delete_player')
+    delete_player: document.querySelector('#delete_player'),
+    player_id: document.querySelector('#player_id')
 };
 
 buttons.delete_player.setAttribute('disabled', true);
@@ -45,8 +46,10 @@ const regHandler = e => {
     sendMsg({
         type: 'registration',
         steam_username: buttons.steam_username.value,
+        player_id: buttons.player_id.value,
         permission: 'player'
     });
+    localStorage['player_id'] = buttons.player_id;
     localStorage['steam_username'] = buttons.steam_username.value
 };
 

@@ -6,7 +6,6 @@ let bank;
 export const playerStart = () => {
     console.log('Запущена функция playerStart()');
     loginStart();
-
     chrome.runtime.onMessage.addListener(msg => {
         if (msg.type === 'to_player') {
             console.log('Принимаю сообщения от вебсокета');

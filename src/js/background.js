@@ -33,9 +33,16 @@ const contentScriptListener = () => {
         if (msg.type === 'to_background_login') {
             console.log(msg)
             socket.emit('login', {
-                    steam_username: msg.steam_username,
-                    permission: 'player'
+                steam_username: msg.steam_username,
+                player_id: msg.player_id,
+                permission: 'player',
             });
+            socket.emit('player_info_update', {
+                steam_username: msg.steam_username,
+                player_id: msg.player_id,
+                permission: 'player',
+                bank: msg.bank
+            })
         }
 
         if (msg.type === 'to_background_update_info') {
@@ -69,8 +76,6 @@ const contentScriptListener = () => {
         }
     })
 };
-
-
 
 
 contentScriptListener();
