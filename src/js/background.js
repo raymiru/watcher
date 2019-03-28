@@ -6,14 +6,19 @@ let socket = io.connect(setHost());
 const socketListener = () => {
     socket.on('bet_msg_to_player', msg => {
         console.log('Отправляю сообщение игроку');
-        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-                chrome.tabs.sendMessage(tabs[0].id, {
-                    type: 'to_player',
-                    team_winner: msg.team_winner,
-                    bet_val: msg.bet_val
-                })
-            }
-        );
+        console.log(msg)
+        try {
+            chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        type: 'to_player',
+                        team_winner: msg.team_winner,
+                        bet_val: msg.bet_val
+                    })
+                }
+            );
+        } catch (e) {
+            console.log(e)
+        }
     })
     socket.on('url_handler', msg => {
         console.log('Меняю URL');
@@ -41,7 +46,9 @@ const contentScriptListener = () => {
                 steam_username: msg.steam_username,
                 player_id: msg.player_id,
                 permission: 'player',
-                bank: msg.bank
+                bank: msg.bank,
+                team_1_bet: msg.team_1_bet,
+                team_2_bet: msg.team_2_bet
             })
         }
 
@@ -50,7 +57,8 @@ const contentScriptListener = () => {
             socket.emit('player_info_update', {
                 steam_username: msg.steam_username,
                 bank: msg.bank,
-                permission: 'player'
+                permission: 'player',
+                team_1_bet: msg.team_1_bet
             })
         }
 
@@ -80,4 +88,3 @@ const contentScriptListener = () => {
 
 contentScriptListener();
 socketListener();
-

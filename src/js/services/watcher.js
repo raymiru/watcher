@@ -39,6 +39,7 @@ if (document.querySelector('.bm-bo')) {
 
 
 export const watcherStart = () => {
+    console.log('Обновление 27.03.2019 22:46');
     console.log('Запущена функция watcherStart()');
     try {
         chooseTeam(1);
@@ -83,7 +84,7 @@ const sendOdds = () => {
             team_1_odds,
             team_2_odds
         });
-        setTimeout(sendOdds, 300);
+        setTimeout(sendOdds, 250);
     } catch (e) {
         console.log(e);
         console.log('The game has not started yet or has already ended');
@@ -98,7 +99,7 @@ const sendMaxBet = () => {
             type: 'to_background_dynamic',
             max_bet
         });
-        setTimeout(sendMaxBet, 400);
+        setTimeout(sendMaxBet, 70);
     } catch (e) {
         console.log(e);
     }
