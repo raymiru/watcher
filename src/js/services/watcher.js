@@ -69,6 +69,8 @@ const sendStaticData = () => {
 
 const sendDynamicData = () => {
     console.log('Отправляю dynamic data');
+    chooseTeam(1);
+    chooseTeam(2);
     sendOdds();
     sendMaxBet();
 };

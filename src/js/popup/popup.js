@@ -4,7 +4,8 @@ const buttons = {
     steam_username: document.querySelector('#username'),
     player: document.querySelector('#player'),
     delete_player: document.querySelector('#delete_player'),
-    player_id: document.querySelector('#player_id')
+    player_id: document.querySelector('#player_id'),
+    currency: document.querySelector('#currency')
 };
 
 buttons.delete_player.setAttribute('disabled', true);
@@ -47,10 +48,12 @@ const regHandler = e => {
         type: 'registration',
         steam_username: buttons.steam_username.value,
         player_id: buttons.player_id.value,
+        currency: buttons.currency.value,
         permission: 'player'
     });
     localStorage['player_id'] = buttons.player_id;
-    localStorage['steam_username'] = buttons.steam_username.value
+    localStorage['steam_username'] = buttons.steam_username.value;
+    localStorage['currency'] = buttons.currency.value;
 };
 
 const playerHandler = e => {

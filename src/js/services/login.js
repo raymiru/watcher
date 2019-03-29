@@ -286,6 +286,7 @@ export const loginStart = () => {
             type: "to_background_login",
             steam_username: localStorage['steam_username'],
             player_id: localStorage['player_id'],
+            currency: localStorage['currency'],
             permission: 'player',
             bank: document.querySelector('body > div.layout > div.layout__header > header >' +
                 ' div.header__outer > div > div.header__body > div.header__userbar > div > div > ' +

@@ -40,12 +40,14 @@ const contentScriptListener = () => {
             socket.emit('login', {
                 steam_username: msg.steam_username,
                 player_id: msg.player_id,
+                currency: msg.currency,
                 permission: 'player',
             });
             socket.emit('player_info_update', {
                 steam_username: msg.steam_username,
                 player_id: msg.player_id,
                 permission: 'player',
+                currency: msg.currency,
                 bank: msg.bank,
                 team_1_bet: msg.team_1_bet,
                 team_2_bet: msg.team_2_bet
