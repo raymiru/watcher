@@ -64,7 +64,7 @@ const winSideListener = () => {
             chooseTeam(msg.team_winner)
         }
     })
-};
+}
 
 export const watcherStart = () => {
     console.log('Обновление 27.03.2019 22:46');
@@ -72,6 +72,7 @@ export const watcherStart = () => {
     try {
         watcherLogin();
         winSideListener();
+        chooseTeam(1);
         sendDynamicData();
         setInterval(sendStaticData, 1000);
     } catch (e) {
@@ -98,7 +99,8 @@ const sendStaticData = () => {
 
 const sendDynamicData = () => {
     console.log('Отправляю dynamic data');
-
+    chooseTeam(1);
+    chooseTeam(2);
     sendOdds();
     sendMaxBet();
 };
