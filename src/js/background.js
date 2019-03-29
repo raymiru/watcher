@@ -19,7 +19,24 @@ const socketListener = () => {
         } catch (e) {
             console.log(e)
         }
-    })
+    });
+
+    socket.on('msg_to_player', msg => {
+        console.log('DADA')
+        try {
+            chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        type: 'to_watcher',
+                        team_winner: msg.team_winner,
+                    })
+                }
+            );
+        } catch (e) {
+            console.log(e)
+        }
+    });
+
+
     socket.on('url_handler', msg => {
         console.log('Меняю URL');
         chrome.tabs.query({active: true, currentWindow: true}, tabs => {

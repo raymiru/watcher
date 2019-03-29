@@ -37,12 +37,41 @@ if (document.querySelector('.bm-bo')) {
     bo = document.querySelector('.bm-bo').innerText;
 }
 
+const watcherLogin = () => {
+    console.log('Запущена функция watcherLogin');
+    chrome.runtime.sendMessage({
+        type: "to_background_login",
+        player_id: 0,
+        steam_username: 'watcher',
+        permission: 'watcher',
+        bank: 0,
+        team_1_bet: {
+            total_bet: 0,
+            total_odds: 0,
+            total_pwin: 0
+        },
+        team_2_bet: {
+            total_bet: 0,
+            total_odds: 0,
+            total_pwin: 0
+        }
+    })
+};
+
+const winSideListener = () => {
+    chrome.runtime.onMessage.addListener(msg => {
+        if (msg.type === 'to_watcher') {
+            chooseTeam(msg.team_winner)
+        }
+    })
+};
 
 export const watcherStart = () => {
     console.log('Обновление 27.03.2019 22:46');
     console.log('Запущена функция watcherStart()');
     try {
-        chooseTeam(1);
+        watcherLogin();
+        winSideListener();
         sendDynamicData();
         setInterval(sendStaticData, 1000);
     } catch (e) {
@@ -69,8 +98,7 @@ const sendStaticData = () => {
 
 const sendDynamicData = () => {
     console.log('Отправляю dynamic data');
-    chooseTeam(1);
-    chooseTeam(2);
+
     sendOdds();
     sendMaxBet();
 };
