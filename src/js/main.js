@@ -1,6 +1,7 @@
 import {watcherStart} from './services/watcher'
 import {deleteUser, regStart} from "./services/registration";
 import {playerStart} from "./services/player";
+import {steamLogin} from "./services/checkSteamLogin";
 
 
 
@@ -31,6 +32,8 @@ const regCheck = () => {
         playerStart();
     } else if (localStorage['steam_username'] === 'watcher') {
         watcherStart();
+    } else if (localStorage['steam_username'] === undefined) {
+        steamLogin();
     }
 };
 

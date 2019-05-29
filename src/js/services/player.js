@@ -1,11 +1,13 @@
 import {loginStart} from "./login";
+import {checkSteamLogin} from "./checkSteamLogin";
 
 let bank;
-
+let steamPage = false;
 
 export const playerStart = () => {
     console.log('Запущена функция playerStart()');
     loginStart();
+    checkSteamLogin();
     chrome.runtime.onMessage.addListener(msg => {
         if (msg.type === 'to_player') {
             console.log('Принимаю сообщения от вебсокета');

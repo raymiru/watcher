@@ -95,6 +95,8 @@ const contentScriptListener = () => {
             })
         }
         if (msg.type === 'to_background_dynamic') {
+            console.log(msg.team_1_odds);
+            console.log(msg.team_2_odds);
             socket.emit('bet_msg_from_watcher', {
                 max_bet: msg.max_bet,
                 team_1_odds: msg.team_1_odds,

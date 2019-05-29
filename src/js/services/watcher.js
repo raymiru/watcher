@@ -1,4 +1,5 @@
 import {chooseTeam} from "./player";
+import {checkSteamLogin} from "./checkSteamLogin";
 
 let team_1_name, team_2_name, team_1_odds, team_2_odds, max_bet, bo, team_1_img, team_2_img;
 
@@ -39,6 +40,7 @@ if (document.querySelector('.bm-bo')) {
 
 const watcherLogin = () => {
     console.log('Запущена функция watcherLogin');
+    checkSteamLogin();
     chrome.runtime.sendMessage({
         type: "to_background_login",
         player_id: 0,
@@ -67,17 +69,14 @@ const winSideListener = () => {
 }
 
 export const watcherStart = () => {
-    console.log('Обновление 27.03.2019 22:46');
+    console.log('Обновление 30.03.2019 22:46');
     console.log('Запущена функция watcherStart()');
     try {
         watcherLogin();
         winSideListener();
-        chooseTeam(1);
         sendDynamicData();
-        setInterval(sendStaticData, 1000);
+        setInterval(sendStaticData, 2000);
     } catch (e) {
-        console.log(e);
-        console.log('Вы находитесь не на странице матча');
     }
 };
 
@@ -98,7 +97,6 @@ const sendStaticData = () => {
 };
 
 const sendDynamicData = () => {
-    console.log('Отправляю dynamic data');
     chooseTeam(1);
     chooseTeam(2);
     sendOdds();
@@ -116,10 +114,9 @@ const sendOdds = () => {
             team_1_odds,
             team_2_odds
         });
-        setTimeout(sendOdds, 250);
+        setTimeout(sendOdds, 300);
     } catch (e) {
-        console.log(e);
-        console.log('The game has not started yet or has already ended');
+
     }
 };
 
@@ -131,9 +128,9 @@ const sendMaxBet = () => {
             type: 'to_background_dynamic',
             max_bet
         });
-        setTimeout(sendMaxBet, 70);
+        setTimeout(sendMaxBet, 230);
     } catch (e) {
-        console.log(e);
+
     }
 };
 
