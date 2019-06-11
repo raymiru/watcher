@@ -43,20 +43,9 @@ const watcherLogin = () => {
     checkSteamLogin();
     chrome.runtime.sendMessage({
         type: "to_background_login",
-        player_id: 0,
-        steam_username: 'watcher',
-        permission: 'watcher',
-        bank: 0,
-        team_1_bet: {
-            total_bet: 0,
-            total_odds: 0,
-            total_pwin: 0
-        },
-        team_2_bet: {
-            total_bet: 0,
-            total_odds: 0,
-            total_pwin: 0
-        }
+        player_id: localStorage['player-id'],
+        steam_username: localStorage['steam-username'],
+        permission: localStorage['permission'],
     })
 };
 
@@ -65,8 +54,19 @@ const winSideListener = () => {
         if (msg.type === 'to_watcher') {
             chooseTeam(msg.team_winner)
         }
+        if (msg.type === 'url_handler') {
+            document.location.href = localStorage['url'] + msg.match_url
+        }
+        if (msg.type === 'go_back') {
+            setTimeout(() => {
+                document.location.href = 'https://' + document.location.host
+            })
+        }
+        if (msg.type === 'reload') {
+            document.location.reload();
+        }
     })
-}
+};
 
 export const watcherStart = () => {
     console.log('Обновление 30.03.2019 22:46');
@@ -85,18 +85,17 @@ const sendStaticData = () => {
     console.log('Отправляю static data');
     chrome.runtime.sendMessage({
         type: 'to_background_static',
-        match_url: window.location.href,
+        player_id: localStorage['player-id'],
+        match_url: document.location.pathname,
         team_1_name,
         team_2_name,
         team_1_img,
         team_2_img,
-        bo,
-        team_1_odds: team_1_odds,
-        team_2_odds: team_2_odds,
     })
 };
 
 const sendDynamicData = () => {
+
     chooseTeam(1);
     chooseTeam(2);
     sendOdds();
@@ -111,6 +110,7 @@ const sendOdds = () => {
         console.log(team_2_odds);
         chrome.runtime.sendMessage({
             type: 'to_background_dynamic',
+            player_id: localStorage['player-id'],
             team_1_odds,
             team_2_odds
         });
@@ -122,10 +122,11 @@ const sendOdds = () => {
 
 const sendMaxBet = () => {
     try {
-        max_bet = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-amounts > div.bet-pop-amount.bet-pop-userbet > div.input-max.bet-pop-right.bet-currency.bet-currency_USD.input-max_max > div > div.input-max__max > span').innerText;
+        max_bet = document.querySelector("#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-amounts > div.bet-pop-amount.bet-pop-userbet > div.input-max.bet-pop-right.bet-currency.bet-currency_RUB.input-max_max > div > div.input-max__max > span").innerText;
         console.log(`MAX BET : ${max_bet}`);
         chrome.runtime.sendMessage({
             type: 'to_background_dynamic',
+            player_id: localStorage['player-id'],
             max_bet
         });
         setTimeout(sendMaxBet, 230);

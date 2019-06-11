@@ -1,5 +1,9 @@
 import {loginStart} from "./login";
 import {checkSteamLogin} from "./checkSteamLogin";
+import Chance from 'chance'
+
+const chance = new Chance();
+
 
 let bank;
 let steamPage = false;
@@ -14,13 +18,30 @@ export const playerStart = () => {
             console.log(msg)
             chooseTeam(msg.team_winner);
             setValue(msg.bet_val);
+            checkEmail()
             warningDisable();
             clickCheckbox();
-            placeBet();
-            setTimeout(refreshPage, 1500);
+            placeBet(msg.delay);
+            setTimeout(loginStart, 2100);
         }
         if (msg.type === 'url_handler') {
-            document.location.href = msg.match_url
+            setTimeout(() => {
+                document.location.href = localStorage['url'] + msg.match_url
+            }, chance.integer({min: 100, max: 2600}))
+        }
+        if (msg.type === 'go_back') {
+            setTimeout(() => {
+                document.location.href = 'https://' + document.location.host
+            }, chance.integer({min: 50, max: 5500}))
+        }
+
+        // chrome.tabs.getCurrent(function(tab) {
+        //     chrome.tabs.remove(tab.id)
+        // })
+        if (msg.type === 'reload') {
+            setTimeout(() => {
+                document.location.reload();
+            }, chance.integer({min: 50, max: 1100}))
         }
 
     })
@@ -46,6 +67,12 @@ export const chooseTeam = team_winner => {
         console.log(e)
     }
 };
+
+const checkEmail = () => {
+    if (document.querySelector("#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-warning.bet-pop-email > input[type=text]")) {
+        document.querySelector("#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-warning.bet-pop-email > input[type=text]").value = localStorage['email'];
+    }
+}
 
 const clickCheckbox = () => {
     if (document.querySelector('#ch1')) {
@@ -87,12 +114,16 @@ const warningDisable = () => {
     }
 };
 
-const placeBet = () => {
+const placeBet = (delay) => {
 
     try {
+        console.log(delay)
         let bet_button = document.querySelector('#bet_dialog > div.bet-pop.sys-bet-pop > div.bet-pop-buttons > button');
-        bet_button.click();
-        console.log('Ставка сделана')
+        setTimeout(() => {
+
+            bet_button.click();
+            console.log('Ставка сделана')
+        }, delay)
     } catch (e) {
         console.log(e);
         console.log('Функция placeBet() не выполнена, т.к. не найдена элемент в DOM')

@@ -10,7 +10,9 @@
         "https://betsdota2.com/*",
         "https://betscsgo.com/*",
         "https://steamcommunity.com/*",
-        "https://bets.pro/*"
+        "https://bets.pro/*",
+        "https://betsdota2.gg/*"
+
       ],
       "js": [
         "main.js"
