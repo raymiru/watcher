@@ -11,7 +11,8 @@
         "https://betscsgo.com/*",
         "https://steamcommunity.com/*",
         "https://bets.pro/*",
-        "https://betsdota2.gg/*"
+        "https://betsdota2.gg/*",
+        "https://betscsgo.gg/*"
 
       ],
       "js": [
