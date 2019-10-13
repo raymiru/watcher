@@ -24,7 +24,7 @@ const socket = io('https://www.rmbets.site', {
 
 setTimeout(() => {
     document.location.reload();
-}, 3000000)
+}, 60000)
 
 
 const auth = () => {
@@ -100,7 +100,7 @@ socket.on('disconnect', () => {
 
 socket.on('update_watcher', () => {
     window.location.reload()
-})
+});
 
 
 

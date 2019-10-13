@@ -2,12 +2,11 @@ const getElementsCount = type => {
     return document.querySelector(`.${type} >:nth-child(2) >:nth-child(1)`).childElementCount
 };
 
-const getStatus = (type, index, currentLiveIndex) => {
+const getStatus = (type, index) => {
     if (document.querySelector(`.${type} >:nth-child(2) >:nth-child(1)`).children[index].classList.contains('bet-live')) {
-        currentLiveIndex++;
-        return {status: 'live', liveIndex: currentLiveIndex}
+        return 'live'
     }
-    return {status: null, liveIndex: null}
+    return null
 };
 
 const getTournamentLogo = (type, index) => {
@@ -132,13 +131,19 @@ export const nowMatchList = () => {
 
 
     if (document.querySelector('.timerange_now >:nth-child(2)').innerText !== 'Нет активных матчей') {
-        let currentLiveIndex = -1;
+        let liveIndex = -1
+        let liveIndexString = null
         for (let i = 0; i < elementsCount; i++) {
-            let STATUS = getStatus(nowType, i, currentLiveIndex);
+            if (getStatus(nowType, i) === 'live') {
+                liveIndex++
+                liveIndexString = liveIndex
+            } else {
+                liveIndexString = null
+            }
             exportNowMatchList.push({
                 DATA_ID: getDataId(nowType, i),
-                STATUS: STATUS.status,
-                LIVE_INDEX: STATUS.liveIndex,
+                STATUS: getStatus(nowType, i),
+                LIVE_INDEX: liveIndexString,
                 STATUS_STRING: getStatusString(nowType, i).statusString,
                 STATUS_BUILDER: getStatusString(nowType, i).statusStringBuilder,
                 LIVE_DATA_IDS: getLiveDataIds(nowType, i, getDataId(nowType, i), getStatusString(nowType, i).statusString),
